@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-sinf matematika testi</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      transition: background 0.6s ease;
+    }
+
+    .header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 15px;
+    }
+
+    .logout-btn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+      gap: 20px;
+    }
+
+    .big-btn {
+      width: 250px;
+      height: 90px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 22px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+
+    .big-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .small-btns {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .small-btn {
+      width: 120px;
+      height: 70px;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .small-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .color-picker {
+      margin-top: 40px;
+    }
+
+    .theme-btn {
+      border: none;
+      width: 30px;
+      height: 30px;
+      margin: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="logout-btn" onclick="logout()">Chiqish</button>
+  </div>
+
+  <h1>Matematika test maydoni</h1>
+
+  <div class="buttons">
+    <button class="big-btn" onclick="goTo('test.html')">🧮 Test ishlash</button>
+
+    <div class="small-btns">
+      <button class="small-btn" style="background-color:#2196F3;" onclick="goTo('profile.html')">😊 Profil</button>
+      <button class="small-btn" style="background-color:#FF9800; width:160px;" onclick="goTo('leaderboard.html')">🏆 Leaderboard</button>
+    </div>
+  </div>
+
+  <div class="color-picker">
+    <p><b>🎨 Rang tanlang:</b></p>
+    <button class="theme-btn" style="background:#f5f5dc;" onclick="changeTheme('beige')"></button>
+    <button class="theme-btn" style="background:#e0f7fa;" onclick="changeTheme('sky')"></button>
+    <button class="theme-btn" style="background:#fff0f5;" onclick="changeTheme('pink')"></button>
+    <button class="theme-btn" style="background:#e8f5e9;" onclick="changeTheme('green')"></button>
+  </div>
+
+  <script>
+    // Login tekshiruvi
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(!currentUser){
+      alert("Login qilishingiz kerak!");
+      window.location.href = "login.html";
+    }
+
+    // Rang tanlash
+    const themes = {
+      beige: "#f5f5dc",
+      sky: "#e0f7fa",
+      pink: "#fff0f5",
+      green: "#e8f5e9"
+    };
+
+    function changeTheme(color){
+      document.body.style.background = themes[color];
+      localStorage.setItem("themeColor", color);
+    }
+
+    // Saqlangan rangni tiklash
+    const savedTheme = localStorage.getItem("themeColor");
+    if(savedTheme) document.body.style.background = themes[savedTheme];
+
+    function logout(){
+      localStorage.removeItem("currentUser");
+      window.location.href = "login.html";
+    }
+
+    function goTo(page){
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

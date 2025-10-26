@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 Reyting Jadvali</title>
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    text-align: center;
+    padding: 20px;
+  }
+  h1 { color: #2b2b2b; }
+  table {
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+  }
+  th { background-color: #2b2b2b; color: white; }
+  tr:hover { background-color: #f9f9f9; }
+  .top { color: gold; font-weight: bold; }
+  button {
+    margin-top: 20px;
+    background-color: #2b2b2b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>🏆 Reyting Jadvali</h1>
+<table>
+  <thead>
+    <tr><th>O‘rni</th><th>O‘quvchi</th><th>Sinf</th><th>Jami Ball</th></tr>
+  </thead>
+  <tbody id="leaderBody">
+    <tr><td colspan="4">Yuklanmoqda...</td></tr>
+  </tbody>
+</table>
+
+<button onclick="window.location.href='index.html'">🏠 Bosh sahifa</button>
+
+<script>
+function loadLeaderboard() {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  users.sort((a, b) => (b.totalScore || 0) - (a.totalScore || 0));
+
+  const tbody = document.getElementById("leaderBody");
+  tbody.innerHTML = "";
+  users.forEach((u, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="${i===0?'top':''}">${i+1}</td>
+      <td>${u.emoji || "😀"} ${u.name}</td>
+      <td>${u.sinf}</td>
+      <td>${u.totalScore || 0}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+setInterval(loadLeaderboard, 2000);
+loadLeaderboard();
+</script>
+
+</body>
+</html>

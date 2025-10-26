@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - 1-sinf Test</title>
+<style>
+body {
+    font-family: Comic Sans MS, Arial;
+    margin:0; padding:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    transition: background 2s linear;
+    color:#004d40;
+}
+.login-box {
+    background: rgba(255,255,255,0.95);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    width:300px;
+}
+h2 { margin-bottom:20px; }
+input, select {
+    width:90%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid #004d40;
+    font-size:16px;
+}
+button {
+    padding:10px 20px;
+    margin-top:15px;
+    border:none;
+    border-radius:12px;
+    background:#26a69a;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+button:hover { background:#00796b; }
+p button {
+    background:#29b6f6;
+    margin-top:10px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="login-box" id="loginDiv">
+<h2>Login</h2>
+<input type="text" id="loginName" placeholder="Ismingiz"><br>
+<input type="password" id="loginPassword" placeholder="Parol"><br>
+<select id="loginClass">
+    <option value="">Sinfni tanlang</option>
+    <option value="A">A sinf</option>
+    <option value="B">B sinf</option>
+</select><br>
+<button onclick="login()">Kirish</button>
+<p>Yangi foydalanuvchi? <button onclick="showSignup()">Ro'yxatdan o'tish</button></p>
+</div>
+
+<div class="login-box" id="signupDiv" style="display:none;">
+<h2>Ro'yxatdan o'tish</h2>
+<input type="text" id="signupName" placeholder="Ismingiz"><br>
+<input type="password" id="signupPassword" placeholder="Parol"><br>
+<select id="signupClass">
+    <option value="">Sinfni tanlang</option>
+    <option value="A">A sinf</option>
+    <option value="B">B sinf</option>
+</select><br>
+<select id="signupEmoji">
+<option>😎</option><option>😊</option><option>🐱</option><option>🦄</option>
+</select><br>
+<button onclick="signup()">Ro'yxatdan o'tish</button>
+<p>Allaqachon foydalanuvchi? <button onclick="showLogin()">Login</button></p>
+</div>
+
+<script>
+// Ranglar avtomatik almashish
+const bgColors = ["#FFCDD2","#C5E1A5","#81D4FA","#FFD54F","#FFAB91","#CE93D8","#A5D6A7","#FFF59D"];
+let i = 0;
+setInterval(() => {
+    document.body.style.background = bgColors[i];
+    i = (i+1) % bgColors.length;
+}, 2500);
+
+// Show/hide forms
+function showSignup(){ 
+    document.getElementById("loginDiv").style.display="none"; 
+    document.getElementById("signupDiv").style.display="block"; 
+}
+function showLogin(){ 
+    document.getElementById("signupDiv").style.display="none"; 
+    document.getElementById("loginDiv").style.display="block"; 
+}
+
+// Signup funksiyasi
+function signup(){
+    let name = document.getElementById("signupName").value.trim();
+    let password = document.getElementById("signupPassword").value.trim();
+    let emoji = document.getElementById("signupEmoji").value;
+    let sinf = document.getElementById("signupClass").value;
+    if(!name || !password || !sinf){ alert("Iltimos barcha maydonlarni to'ldiring"); return; }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let exists = users.find(u => u.name===name && u.class===sinf);
+    if(exists){ alert("Bu foydalanuvchi allaqachon mavjud"); return; }
+
+    users.push({name,password,emoji,score:0,class:sinf});
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Ro'yxatdan o'tish muvaffaqiyatli!");
+    showLogin();
+}
+
+// Login funksiyasi
+function login(){
+    let name = document.getElementById("loginName").value.trim();
+    let password = document.getElementById("loginPassword").value.trim();
+    let sinf = document.getElementById("loginClass").value;
+    if(!name || !password || !sinf){ alert("Iltimos barcha maydonlarni to'ldiring"); return; }
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let user = users.find(u => u.name===name && u.password===password && u.class===sinf);
+    if(user){
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        window.location.href = "index.html";
+    } else alert("Login, parol yoki sinf xato!");
+}
+</script>
+
+</body>
+</html>

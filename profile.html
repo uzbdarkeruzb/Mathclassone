@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👦 Mening Profilim</title>
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    text-align: center;
+    padding: 20px;
+  }
+  .profile-box {
+    background: white;
+    border-radius: 25px;
+    padding: 25px;
+    width: 90%;
+    max-width: 400px;
+    margin: 30px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  h1 {
+    color: #ff7b00;
+  }
+  label {
+    font-size: 18px;
+    display: block;
+    margin-top: 10px;
+  }
+  input {
+    padding: 10px;
+    width: 80%;
+    border: 2px solid #ff7b00;
+    border-radius: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+  }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    margin: 10px;
+    cursor: pointer;
+  }
+  button:hover {
+    opacity: 0.9;
+  }
+  .emoji {
+    font-size: 40px;
+    cursor: pointer;
+    margin: 5px;
+    transition: 0.3s;
+  }
+  .emoji:hover {
+    transform: scale(1.2);
+  }
+  .selected {
+    border: 3px solid #ff7b00;
+    border-radius: 50%;
+    padding: 5px;
+  }
+</style>
+</head>
+<body>
+
+<h1>👦 Mening Profilim</h1>
+
+<div class="profile-box">
+  <p><b>Sinf:</b> <span id="userSinf"></span></p>
+  
+  <label>Ismingizni o‘zgartiring:</label>
+  <input type="text" id="nameInput" placeholder="Yangi ism kiriting">
+
+  <label>Parolni o‘zgartiring:</label>
+  <input type="password" id="passwordInput" placeholder="Yangi parol kiriting">
+
+  <label>Profil emojisini tanlang:</label>
+  <div id="emojiList">
+    <span class="emoji">😀</span>
+    <span class="emoji">😎</span>
+    <span class="emoji">🦁</span>
+    <span class="emoji">🐻</span>
+    <span class="emoji">🐯</span>
+    <span class="emoji">🐸</span>
+    <span class="emoji">🦊</span>
+    <span class="emoji">🐰</span>
+  </div>
+
+  <p><b>Tanlangan emoji:</b> <span id="selectedEmoji" style="font-size:30px;"></span></p>
+
+  <button onclick="saveChanges()">💾 Saqlash</button>
+  <button onclick="logout()">🚪 Chiqish</button>
+  <button onclick="window.location.href='index.html'">🏠 Bosh sahifaga</button>
+</div>
+
+<script>
+// Login tekshiruvi
+let user = JSON.parse(localStorage.getItem("currentUser"));
+if (!user) {
+  alert("Avval login qilishingiz kerak!");
+  window.location.href = "login.html";
+}
+
+document.getElementById("userSinf").textContent = user.sinf;
+document.getElementById("nameInput").value = user.name;
+document.getElementById("passwordInput").value = user.password;
+document.getElementById("selectedEmoji").textContent = user.emoji || "😀";
+
+let emojis = document.querySelectorAll(".emoji");
+emojis.forEach(e => {
+  if (e.textContent === user.emoji) e.classList.add("selected");
+  e.addEventListener("click", () => {
+    emojis.forEach(em => em.classList.remove("selected"));
+    e.classList.add("selected");
+    document.getElementById("selectedEmoji").textContent = e.textContent;
+  });
+});
+
+function saveChanges() {
+  let newName = document.getElementById("nameInput").value.trim();
+  let newPass = document.getElementById("passwordInput").value.trim();
+  let newEmoji = document.getElementById("selectedEmoji").textContent;
+
+  if (!newName || !newPass) {
+    alert("Ism va parol bo‘sh bo‘lishi mumkin emas!");
+    return;
+  }
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let updatedUsers = users.map(u => {
+    if (u.name === user.name && u.password === user.password) {
+      return { name: newName, password: newPass, sinf: user.sinf, emoji: newEmoji };
+    }
+    return u;
+  });
+
+  localStorage.setItem("users", JSON.stringify(updatedUsers));
+  user = { name: newName, password: newPass, sinf: user.sinf, emoji: newEmoji };
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  alert("✅ O‘zgarishlar saqlandi!");
+}
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
